@@ -40,17 +40,26 @@ void draw() { // процедура прорисовывания картинк�
 		for (int j = 0; j < width - 1; ++j) {//верхний край
 			if (j == 0 || j == width - 2)// правый и левый края
 				cout << "H";
-			if (i == snakeY && j == snakeX)// головы змеи
-				cout << "0";
+			if (i == snakeY && j == snakeX) {// головы змеи
+				HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+				SetConsoleTextAttribute(hStdOut, 2);
+				cout << "0"; // голова змеи
+				SetConsoleTextAttribute(hStdOut, FOREGROUND_RED | //зеленый текст на черном фоне
+					FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+			}
 			else if (i == fruitY && j == fruitX)// фрукта
 				cout << "$";
 			else {
 				bool drawTail = false;// рисовать ли хвост
 				for (int k = 0; k < Ntail; ++k) {
 					if (tailX[k] == j && tailY[k] == i) {
-					drawTail = true;
-					cout << "%";
-				}
+						drawTail = true;
+						HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+						SetConsoleTextAttribute(hStdOut, 2);
+						cout << "%"; // голова змеи
+						SetConsoleTextAttribute(hStdOut, FOREGROUND_RED | //зеленый текст на черном фоне
+						FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+					}
 				}
 				if (!drawTail) cout << " ";// пустое место карты, если хвост не рисовать
 			}
@@ -116,7 +125,7 @@ void logic() { // логика игры, проверка правил игры
 		snakeY = height - 1;
 		
 	
-	for (int i = 0; i < Ntail; ++i) { // проверка на косания хвоста
+	for (int i = 0; i < Ntail; ++i) { // проверка на косание хвоста
 		if (tailX[i] == snakeX && tailY[i] == snakeY)
 			gameover = true; // если съел хвост проиграл
 	}
@@ -139,5 +148,3 @@ int main() {
 
 	return 0;
 }
-
-# snake
