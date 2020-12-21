@@ -6,19 +6,19 @@
 
 using namespace std;
 
-bool gameover; // проверка на проигрыш
+bool gameover; // РїСЂРѕРІРµСЂРєР° РЅР° РїСЂРѕРёРіСЂС‹С€
 
-const int width = 30; // размеры карты
+const int width = 30; // СЂР°Р·РјРµСЂС‹ РєР°СЂС‚С‹
 const int height = 20;
 
-int snakeX, snakeY; //координаты головы змеи
-int fruitX, fruitY, score;//координаты фрукта и счет игры
-int tailX[100], tailY[100], Ntail; //хвост змеи, Ntail - размер хвоста
+int snakeX, snakeY; //РєРѕРѕСЂРґРёРЅР°С‚С‹ РіРѕР»РѕРІС‹ Р·РјРµРё
+int fruitX, fruitY, score;//РєРѕРѕСЂРґРёРЅР°С‚С‹ С„СЂСѓРєС‚Р° Рё СЃС‡РµС‚ РёРіСЂС‹
+int tailX[100], tailY[100], Ntail; //С…РІРѕСЃС‚ Р·РјРµРё, Ntail - СЂР°Р·РјРµСЂ С…РІРѕСЃС‚Р°
 
-enum eDirection { STOP = 0, LEFT, RIGHT, UP, DOWN };// виды движения
+enum eDirection { STOP = 0, LEFT, RIGHT, UP, DOWN };// РІРёРґС‹ РґРІРёР¶РµРЅРёСЏ
 eDirection dir;
 
-void setup() { // начальные параметры при запуске игры
+void setup() { // РЅР°С‡Р°Р»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РїСЂРё Р·Р°РїСѓСЃРєРµ РёРіСЂС‹
 	gameover = false;
 	SetConsoleTitle(L"Snake");
 	dir = STOP;
@@ -28,43 +28,43 @@ void setup() { // начальные параметры при запуске игры
 	fruitY = rand() % height;
 	score = 0;
 }
-// надо сделать 2-ную буферизацию, чтобы избавиться от бликов
-void draw() { // процедура прорисовывания картинки
-	system("cls");//очистить консольное окно, начать рисовать новый кадр
-	Sleep(100); // задержка в 1/10 секунды
+// РЅР°РґРѕ СЃРґРµР»Р°С‚СЊ 2-РЅСѓСЋ Р±СѓС„РµСЂРёР·Р°С†РёСЋ, С‡С‚РѕР±С‹ РёР·Р±Р°РІРёС‚СЊСЃСЏ РѕС‚ Р±Р»РёРєРѕРІ
+void draw() { // РїСЂРѕС†РµРґСѓСЂР° РїСЂРѕСЂРёСЃРѕРІС‹РІР°РЅРёСЏ РєР°СЂС‚РёРЅРєРё
+	system("cls");//РѕС‡РёСЃС‚РёС‚СЊ РєРѕРЅСЃРѕР»СЊРЅРѕРµ РѕРєРЅРѕ, РЅР°С‡Р°С‚СЊ СЂРёСЃРѕРІР°С‚СЊ РЅРѕРІС‹Р№ РєР°РґСЂ
+	Sleep(100); // Р·Р°РґРµСЂР¶РєР° РІ 1/10 СЃРµРєСѓРЅРґС‹
 	for (int i = 0; i < width; ++i)
 		cout << "Z";
 	cout << endl;
 
-	for (int i = 0; i < height; ++i) { // прорисовка карты
-		for (int j = 0; j < width - 1; ++j) {//верхний край
-			if (j == 0 || j == width - 2)// правый и левый края
+	for (int i = 0; i < height; ++i) { // РїСЂРѕСЂРёСЃРѕРІРєР° РєР°СЂС‚С‹
+		for (int j = 0; j < width - 1; ++j) {//РІРµСЂС…РЅРёР№ РєСЂР°Р№
+			if (j == 0 || j == width - 2)// РїСЂР°РІС‹Р№ Рё Р»РµРІС‹Р№ РєСЂР°СЏ
 				cout << "H";
-			if (i == snakeY && j == snakeX)// головы змеи
+			if (i == snakeY && j == snakeX)// РіРѕР»РѕРІС‹ Р·РјРµРё
 				cout << "0";
-			else if (i == fruitY && j == fruitX)// фрукта
+			else if (i == fruitY && j == fruitX)// С„СЂСѓРєС‚Р°
 				cout << "$";
 			else {
-				bool drawTail = false;// рисовать ли хвост
+				bool drawTail = false;// СЂРёСЃРѕРІР°С‚СЊ Р»Рё С…РІРѕСЃС‚
 				for (int k = 0; k < Ntail; ++k) {
 					if (tailX[k] == j && tailY[k] == i) {
 					drawTail = true;
 					cout << "%";
 				}
 				}
-				if (!drawTail) cout << " ";// пустое место карты, если хвост не рисовать
+				if (!drawTail) cout << " ";// РїСѓСЃС‚РѕРµ РјРµСЃС‚Рѕ РєР°СЂС‚С‹, РµСЃР»Рё С…РІРѕСЃС‚ РЅРµ СЂРёСЃРѕРІР°С‚СЊ
 			}
 		}
 		cout << endl;
 	}
-	for (int i = 0; i < width; ++i)// нижний края карты
+	for (int i = 0; i < width; ++i)// РЅРёР¶РЅРёР№ РєСЂР°СЏ РєР°СЂС‚С‹
 		cout << "Z";
 	cout << endl;
-	cout << "Score: " << score; // отображения счета
+	cout << "Score: " << score; // РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ СЃС‡РµС‚Р°
 	Sleep(100);
 }
 
-void input() { // настройки клавиш клавиатуры
+void input() { // РЅР°СЃС‚СЂРѕР№РєРё РєР»Р°РІРёС€ РєР»Р°РІРёР°С‚СѓСЂС‹
 	if (_kbhit()) {
 		switch (_getch()) {
 			case 'a': dir = LEFT; break;
@@ -76,17 +76,28 @@ void input() { // настройки клавиш клавиатуры
 	}
 }
 
-void logic() { // логика игры, проверка правил игры
-	// сделать хвост
+void logic() { // Р»РѕРіРёРєР° РёРіСЂС‹, РїСЂРѕРІРµСЂРєР° РїСЂР°РІРёР» РёРіСЂС‹
+	int prevX = tailX[0], prevY = tailY[0]; // СЂРёСЃРѕРІРєР° С…РІРѕСЃС‚Р°
+	int prev2X, prev2Y;
+	tailX[0] = snakeX;
+	tailY[0] = snakeY;
+	for (int i = 1; i < Ntail; ++i) { 
+		prev2X = tailX[i];
+		prev2Y = tailY[i];
+		tailX[i] = prevX;
+		tailY[i] = prevY;
+		prevX = prev2X;
+		prevY = prev2Y;
+	}
 
-	switch (dir) { // движение при нажатии клавиши
+	switch (dir) { // РґРІРёР¶РµРЅРёРµ РїСЂРё РЅР°Р¶Р°С‚РёРё РєР»Р°РІРёС€Рё
 		case LEFT: 
 			snakeX--;
 			break;
 		case RIGHT: 
 			++snakeX;
 			break;
-		case DOWN: // почему-то получилась инверсия движений вверх и вниз
+		case DOWN: // РїРѕС‡РµРјСѓ-С‚Рѕ РїРѕР»СѓС‡РёР»Р°СЃСЊ РёРЅРІРµСЂСЃРёСЏ РґРІРёР¶РµРЅРёР№ РІРІРµСЂС… Рё РІРЅРёР·
 			++snakeY;
 			break;
 		case UP: 
@@ -94,25 +105,33 @@ void logic() { // логика игры, проверка правил игры
 			break;
 	}
 	
-	// телепортацию на противоположный край
+	if (snakeX >= width - 2) // С‚РµР»РµРїРѕСЂС‚Р°С†РёСЏ РЅР° РїСЂРѕС‚РёРІРѕРїРѕР»РѕР¶РЅС‹Р№ РєСЂР°Р№
+		snakeX = 0;			// РїСЂРё РґРѕСЃС‚РёР¶РµРЅРёРё РєСЂР°СЏ
+	else if (snakeX < 0)
+		snakeX = width - 3;
+
+	if (snakeY >= height)
+		snakeY = 0;
+	else if (snakeY < 0)
+		snakeY = height - 1;
 		
 	
-	for (int i = 0; i < Ntail; ++i) { // проверка на косания хвоста
+	for (int i = 0; i < Ntail; ++i) { // РїСЂРѕРІРµСЂРєР° РЅР° РєРѕСЃР°РЅРёСЏ С…РІРѕСЃС‚Р°
 		if (tailX[i] == snakeX && tailY[i] == snakeY)
-			gameover = true; // если съел хвост проиграл
+			gameover = true; // РµСЃР»Рё СЃСЉРµР» С…РІРѕСЃС‚ РїСЂРѕРёРіСЂР°Р»
 	}
 
-	if (snakeX == fruitX && snakeY == fruitY) {// проверка на съедение фрукта
+	if (snakeX == fruitX && snakeY == fruitY) {// РїСЂРѕРІРµСЂРєР° РЅР° СЃСЉРµРґРµРЅРёРµ С„СЂСѓРєС‚Р°
 		score += 10;
-		fruitX = rand() % (width - 1);// генерация нового фрукта
+		fruitX = rand() % (width - 1);// РіРµРЅРµСЂР°С†РёСЏ РЅРѕРІРѕРіРѕ С„СЂСѓРєС‚Р°
 		fruitY = rand() % (height - 1);
-		++Ntail; // после поедания фрукта хвост увеличивается
+		++Ntail; // РїРѕСЃР»Рµ РїРѕРµРґР°РЅРёСЏ С„СЂСѓРєС‚Р° С…РІРѕСЃС‚ СѓРІРµР»РёС‡РёРІР°РµС‚СЃСЏ
 	}
 }
 
 int main() {
 	setup();
-	while (!gameover) { // пока не проиграл рисовать и проверять
+	while (!gameover) { // РїРѕРєР° РЅРµ РїСЂРѕРёРіСЂР°Р» СЂРёСЃРѕРІР°С‚СЊ Рё РїСЂРѕРІРµСЂСЏС‚СЊ
 		draw();
 		input();
 		logic();
